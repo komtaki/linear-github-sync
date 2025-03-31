@@ -1,0 +1,26 @@
+{
+  "name": "linear",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "tsc",
+    "start:sync-priority": "node --env-file=.env ./node_modules/.bin/tsx src/syncGithubPriority.ts",
+    "start:sync-assign": "node --env-file=.env ./node_modules/.bin/tsx src/syncGithubAssignee.ts"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@linear/import": "^2.2.7"
+  },
+  "devDependencies": {
+    "@linear/sdk": "^2.3.0",
+    "@octokit/graphql": "^7.1.1",
+    "@octokit/rest": "^20.0.2",
+    "@types/node": "^20.11.25",
+    "ts-node": "^10.9.2",
+    "tsx": "^4.7.1",
+    "typescript": "^5.4.2"
+  }
+}
