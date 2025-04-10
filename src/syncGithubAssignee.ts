@@ -421,12 +421,18 @@ async function syncAssignees(): Promise<void> {
       );
 
       // 説明に「View original issue in GitHub」リンクと同じイシュー番号があるタスクを検索
-      const issueNumberPattern = `${validOwner}/${validRepo}/issues/${githubIssue.number}`;
+      const issueNumberPattern = `[View original issue in GitHub](https://github.com/${validOwner}/${validRepo}/issues/${githubIssue.number})`;
       const allMatchingIssues = await linearClient.issues({
         filter: {
           team: { id: { eq: teamId } },
-          title: { eq: githubIssue.title.trim() },
-          description: { contains: issueNumberPattern },
+          or: [
+            {
+              title: { eq: githubIssue.title.trim() },
+            },
+            {
+              description: { contains: issueNumberPattern },
+            },
+          ],
         },
       });
 
