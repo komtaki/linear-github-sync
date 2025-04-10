@@ -555,48 +555,6 @@ async function syncPriorities(): Promise<void> {
       return;
     }
 
-    // LinearとGitHubのタスクを関連付け
-    console.log("Linear側のタスクを取得しています...");
-
-    // API呼び出し回数を減らすために一度にLinearタスクを取得
-    console.log("Linearからタスクをバッチ取得します...");
-    const issueNumberPatterns = githubIssues
-      .map((issue) => `${validOwner}/${validRepo}/issues/${issue.number}`)
-      .join("|");
-
-    // LinearのAPIはcontainsAnyをサポートしていないため、個別に取得
-    console.log("GitHub Issue IDに基づいてLinearタスクを取得します...");
-    const allLinearIssues = await linearClient.issues({
-      filter: {
-        team: { id: { eq: teamId } },
-        state: { type: { neq: "completed" } },
-        description: { contains: issueNumberPatterns },
-      },
-      first: 100,
-    });
-
-    console.log(
-      `Linear側から ${allLinearIssues.nodes.length} 件のタスクを取得しました`
-    );
-
-    // Linearタスクをマッピング
-    const linearTaskMap = new Map<string, Issue[]>();
-    for (const linearIssue of allLinearIssues.nodes) {
-      for (const githubIssue of githubIssues) {
-        const issuePattern = `${validOwner}/${validRepo}/issues/${githubIssue.number}`;
-        if (
-          linearIssue.description &&
-          linearIssue.description.includes(issuePattern)
-        ) {
-          const key = issuePattern;
-          if (!linearTaskMap.has(key)) {
-            linearTaskMap.set(key, []);
-          }
-          linearTaskMap.get(key)?.push(linearIssue);
-        }
-      }
-    }
-
     // GitHubイシューとLinearタスクを名前でマッチング
     const updates: UpdateInfo[] = [];
     for (const githubIssue of githubIssues) {
