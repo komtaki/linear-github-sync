@@ -1,6 +1,5 @@
 import { LinearClient, Issue } from "@linear/sdk";
 import { Octokit } from "@octokit/rest";
-import { graphql } from "@octokit/graphql";
 
 // 環境変数から認証情報とパラメータを取得
 const linearApiKey: string | undefined = process.env.LINEAR_API_KEY;
